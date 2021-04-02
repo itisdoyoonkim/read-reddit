@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { Row, Col } from "antd";
-import ResultList from "./ResultList";
+import SearchView from "./SearchView";
 import Details from "./Details";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
     <main className="App">
       <Row>
         <Col span={9}>
-          <ResultList setCurrentPost={(value) => setCurrentPost(value)} />
+          <SearchView setCurrentPost={(value) => setCurrentPost(value)} />
         </Col>
         <Col span={15}>
           <Details currentPost={currentPost} />

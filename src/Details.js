@@ -1,7 +1,6 @@
 import React from "react";
 
 function Details({ currentPost }) {
-  console.log("Details comp: ", currentPost);
   return (
     <section>
       <article id="details">
