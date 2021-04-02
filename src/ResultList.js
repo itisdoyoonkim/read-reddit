@@ -11,14 +11,21 @@ function ResultList({ setCurrentPost }) {
   const [data, setData] = useState({ result: [], after: null });
   const [subreddit, setSubreddit] = useState(null);
   const [error, setError] = useState(null);
+  const [subredditsInLocalStorage, setSubredditsInLocalStorage] = useState([]);
 
   useEffect(() => {
+    if (localStorage.length) {
+      setSubredditsInLocalStorage(
+        JSON.parse(localStorage.getItem("subreddits"))
+      );
+    }
+
     const setTimeoutId = setTimeout(() => {
       if (subreddit) {
         console.log("Fetching..now!");
         fetchFromSubreddit();
       }
-    }, 1200);
+    }, 1000);
     return () => {
       console.log("Clean up function invoked.");
       clearTimeout(setTimeoutId);
@@ -76,15 +83,19 @@ function ResultList({ setCurrentPost }) {
       );
       arrayOfSubredditNames = [...existingArrayOfSubredditNames];
       arrayOfSubredditNames.push(subreddit);
+      setSubredditsInLocalStorage(arrayOfSubredditNames);
       localStorage.setItem("subreddits", JSON.stringify(arrayOfSubredditNames));
     } else {
       // simply store this subreddit name
       let arrayOfSubredditNames = [];
       arrayOfSubredditNames.push(subreddit);
+      setSubredditsInLocalStorage(arrayOfSubredditNames);
       localStorage.setItem("subreddits", JSON.stringify(arrayOfSubredditNames));
     }
   };
 
+  console.log(subredditsInLocalStorage);
+  console.log(subreddit);
   return (
     <section id="result-list">
       <Button
@@ -124,15 +135,19 @@ function ResultList({ setCurrentPost }) {
         </Button>
       </div>
 
-      <label htmlFor="subreddits">Or choose from your saved subreddits</label>
       <select
         onChange={changeSubreddit}
         name="subreddits"
         style={{ width: "100%" }}
       >
-        {JSON.parse(localStorage.getItem("subreddits")).map((each) => {
-          return <option value={each}>{each}</option>;
-        })}
+        <option disabled selected value>
+          Choose from your saved list
+        </option>
+
+        {subredditsInLocalStorage &&
+          subredditsInLocalStorage.map((each) => {
+            return <option value={each}>{each}</option>;
+          })}
       </select>
 
       <List
