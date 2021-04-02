@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { Row, Col } from "antd";
+import ResultList from "./ResultList";
+import Details from "./Details";
 
 function App() {
+  const [currentPost, setCurrentPost] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="App">
+      <Row>
+        <Col span={9}>
+          <ResultList setCurrentPost={(value) => setCurrentPost(value)} />
+        </Col>
+        <Col span={15}>
+          <Details currentPost={currentPost} />
+        </Col>
+      </Row>
+    </main>
   );
 }
 
