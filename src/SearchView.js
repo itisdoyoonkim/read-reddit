@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button } from "antd";
+import { Affix } from "antd";
 import axios from "axios";
-// import { SearchOutlined } from "@ant-design/icons";
 import ResultList from "./ResultList";
 import SearchInput from "./SearchInput";
 
@@ -22,7 +21,7 @@ function SearchView({ setCurrentPost }) {
       if (subreddit) {
         fetchFromSubreddit();
       }
-    }, 1000);
+    }, 800);
 
     return () => {
       clearTimeout(setTimeoutId);
@@ -80,44 +79,51 @@ function SearchView({ setCurrentPost }) {
 
   return (
     <section id="result-list">
-      <Button
-        style={{
-          width: "100%",
-          backgroundColor: "#720298",
-          color: "#f5f5f5",
-          borderColor: "#720298",
-        }}
-        onClick={fetchMore}
-      >
-        Show more posts
-      </Button>
+      <Affix>
+        <div
+          style={{
+            padding: "12px",
+            color: "#f5f5f5",
+            backgroundColor: "#1a1d1a",
+          }}
+        >
+          r/{error ? error.msg : subreddit}
+        </div>
+        <SearchInput
+          subreddit={subreddit}
+          handleSave={handleSave}
+          changeSubreddit={changeSubreddit}
+        />
+        <select
+          onChange={changeSubreddit}
+          name="subreddits"
+          style={{ width: "100%" }}
+        >
+          <option disabled selected value>
+            Choose from your saved list
+          </option>
 
-      <SearchInput
-        subreddit={subreddit}
-        handleSave={handleSave}
-        changeSubreddit={changeSubreddit}
-      />
-      <select
-        onChange={changeSubreddit}
-        name="subreddits"
-        style={{ width: "100%" }}
-      >
-        <option disabled selected value>
-          Choose from your saved list
-        </option>
+          {subredditsInLocalStorage &&
+            subredditsInLocalStorage.map((each) => {
+              return <option value={each}>{each}</option>;
+            })}
+        </select>
+      </Affix>
 
-        {subredditsInLocalStorage &&
-          subredditsInLocalStorage.map((each) => {
-            return <option value={each}>{each}</option>;
-          })}
-      </select>
-
-      <ResultList
-        data={data.result}
-        error={error}
-        subreddit={subreddit}
-        setCurrentPost={setCurrentPost}
-      />
+      {data.result.length ? (
+        <ResultList
+          data={data.result}
+          error={error}
+          subreddit={subreddit}
+          setCurrentPost={setCurrentPost}
+          fetchMore={fetchMore}
+        />
+      ) : (
+        <div style={{ padding: "10px", color: "grey" }}>
+          Try searching for a subreddit or choosing from your saved list of
+          subreddits.
+        </div>
+      )}
     </section>
   );
 }

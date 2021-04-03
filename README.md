@@ -23,9 +23,7 @@ npm start
 <!-- TO DO -->
 
 Show comments
-Infinite scroll to fetch more posts
-Store searches to local storage
-Add loading screen
+Prevent duplicate save to local storage
 Ditch ANTD and use own CSS
 Unit test
 Get domain - Skinnyreddit.com
