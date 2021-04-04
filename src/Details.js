@@ -17,15 +17,6 @@ function Details({ currentPost }) {
             scrolling="no"
           />
         </article>
-        {/* <article>
-        <h3>comments</h3>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae,
-          amet atque porro pariatur at velit incidunt dolores earum, aliquam
-          facilis explicabo obcaecati aspernatur, perferendis distinctio facere
-          fugit quis quas tempore.
-        </p>
-      </article> */}
       </Affix>
     </section>
   );

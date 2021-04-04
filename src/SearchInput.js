@@ -4,30 +4,20 @@ import { SearchOutlined } from "@ant-design/icons";
 
 function SearchInput({ subreddit, handleSave, changeSubreddit }) {
   return (
-    <div style={{ display: "flex" }}>
+    <section id="search-section">
       <Input
-        prefix={<SearchOutlined className="site-form-item-icon" />}
-        style={{ padding: "10px", fontSize: "1.1rem" }}
+        suffix={<SearchOutlined className="site-form-item-icon" />}
         type="text"
         name="subreddit"
-        id="subreddit-one"
+        id="search-input-field"
         value={subreddit}
         autoFocus={true}
         onChange={changeSubreddit}
       />
-      <Button
-        onClick={handleSave}
-        style={{
-          height: "100%",
-          backgroundColor: "#720298",
-          padding: "15px",
-          color: "#f5f5f5",
-          borderColor: '#720298"',
-        }}
-      >
-        Save it for later
+      <Button onClick={handleSave} id="save-button">
+        SAVE IT FOR LATER
       </Button>
-    </div>
+    </section>
   );
 }
 

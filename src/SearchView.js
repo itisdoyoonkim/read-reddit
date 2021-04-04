@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Affix } from "antd";
+import { Affix, Alert } from "antd";
 import axios from "axios";
 import ResultList from "./ResultList";
 import SearchInput from "./SearchInput";
@@ -9,6 +9,7 @@ function SearchView({ setCurrentPost }) {
   const [subreddit, setSubreddit] = useState(null);
   const [error, setError] = useState(null);
   const [subredditsInLocalStorage, setSubredditsInLocalStorage] = useState([]);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     if (localStorage.length) {
@@ -21,14 +22,13 @@ function SearchView({ setCurrentPost }) {
       if (subreddit) {
         fetchFromSubreddit();
       }
-    }, 800);
+    }, 500);
 
     return () => {
       clearTimeout(setTimeoutId);
     };
   }, [subreddit]);
 
-  // https://www.reddit.com/r/amcstock/.json?limit=30&after=t3_mhjf9n
   const fetchFromSubreddit = async (lastPostId) => {
     try {
       const fetchResult = await axios.get(
@@ -58,8 +58,22 @@ function SearchView({ setCurrentPost }) {
   };
 
   const handleSave = () => {
+    if (!subreddit) {
+      setError({ msg: "not sure what to save or search for..." });
+      return;
+    }
+
+    if (localStorage.subreddits.includes(subreddit)) {
+      setMessage({ msg: "Already saved.", type: "danger" });
+      setTimeout(() => {
+        setMessage(null);
+      }, 1500);
+
+      return;
+    }
+
     if (localStorage.length) {
-      // push to existing data
+      // Push to existing local storage.
       let arrayOfSubredditNames = [];
       let existingArrayOfSubredditNames = JSON.parse(
         localStorage.getItem("subreddits")
@@ -68,38 +82,39 @@ function SearchView({ setCurrentPost }) {
       arrayOfSubredditNames.push(subreddit);
       setSubredditsInLocalStorage(arrayOfSubredditNames);
       localStorage.setItem("subreddits", JSON.stringify(arrayOfSubredditNames));
+      setMessage({ msg: "Saved.", type: "success" });
+      setTimeout(() => {
+        setMessage(null);
+      }, 1500);
     } else {
-      // simply store this subreddit name
+      // Nothing is stored in local storage. Simply store this subreddit name.
       let arrayOfSubredditNames = [];
       arrayOfSubredditNames.push(subreddit);
       setSubredditsInLocalStorage(arrayOfSubredditNames);
       localStorage.setItem("subreddits", JSON.stringify(arrayOfSubredditNames));
+      setMessage({ msg: "Saved.", type: "success" });
+      setTimeout(() => {
+        setMessage(null);
+      }, 1500);
     }
   };
 
   return (
     <section id="result-list">
+      {message ? <Alert type={message?.type} message={message?.msg} /> : null}
       <Affix>
-        <div
-          style={{
-            padding: "12px",
-            color: "#f5f5f5",
-            backgroundColor: "#1a1d1a",
-          }}
-        >
-          r/{error ? error.msg : subreddit}
-        </div>
+        <div id="not-found-message">r/{error ? error.msg : subreddit}</div>
         <SearchInput
           subreddit={subreddit}
           handleSave={handleSave}
           changeSubreddit={changeSubreddit}
         />
         <select
+          id="saved-search-options"
           onChange={changeSubreddit}
           name="subreddits"
-          style={{ width: "100%" }}
         >
-          <option disabled selected value>
+          <option disabled selected defaultValue={subreddit}>
             Choose from your saved list
           </option>
 
