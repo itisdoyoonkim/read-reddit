@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Row, Col } from "antd";
 import SearchView from "./SearchView";
 import Details from "./Details";
 
@@ -9,14 +8,12 @@ function App() {
 
   return (
     <main className="App">
-      <Row>
-        <Col span={9}>
-          <SearchView setCurrentPost={(value) => setCurrentPost(value)} />
-        </Col>
-        <Col span={15}>
-          <Details currentPost={currentPost} />
-        </Col>
-      </Row>
+      <section id="search-result-view">
+        <SearchView setCurrentPost={(value) => setCurrentPost(value)} />
+      </section>
+      <section id="details-view">
+        <Details currentPost={currentPost} />
+      </section>
     </main>
   );
 }
