@@ -63,7 +63,10 @@ function SearchView({ setCurrentPost }) {
       return;
     }
 
-    if (localStorage.subreddits.includes(subreddit)) {
+    if (
+      localStorage.getItem("subreddits") &&
+      localStorage.subreddits.includes(subreddit)
+    ) {
       setMessage({ msg: "Already saved.", type: "danger" });
       setTimeout(() => {
         setMessage(null);
